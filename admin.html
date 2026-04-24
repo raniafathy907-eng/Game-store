@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>لوحة الأدمن</title>
+
+<style>
+body{
+font-family:tahoma;
+background:#111;
+color:#fff;
+text-align:center;
+}
+
+.box{
+background:#222;
+margin:10px;
+padding:10px;
+border-radius:10px;
+}
+
+input,button{
+padding:10px;
+margin:5px;
+width:200px;
+}
+
+#panel{display:none}
+</style>
+</head>
+
+<body>
+
+<!-- تسجيل الدخول -->
+<div id="login">
+<h2>🔐 دخول الأدمن</h2>
+<input type="password" id="pass" placeholder="ادخل الباسورد">
+<br>
+<button onclick="checkPass()">دخول</button>
+</div>
+
+<!-- لوحة التحكم -->
+<div id="panel">
+<h2>📊 الطلبات</h2>
+
+<div id="orders"></div>
+
+<button onclick="clearOrders()">حذف كل الطلبات</button>
+</div>
+
+<script>
+
+function checkPass(){
+let pass=document.getElementById("pass").value;
+
+if(pass==="2077"){
+document.getElementById("login").style.display="none";
+document.getElementById("panel").style.display="block";
+loadOrders();
+}else{
+alert("❌ الباسورد غلط");
+}
+}
+
+function loadOrders(){
+let orders=JSON.parse(localStorage.getItem("orders")||"[]");
+let box=document.getElementById("orders");
+box.innerHTML="";
+
+if(orders.length===0){
+box.innerHTML="<p>لا يوجد طلبات</p>";
+return;
+}
+
+orders.forEach((o,i)=>{
+box.innerHTML+=`
+<div class="box">
+<p>اللعبة: ${o.game}</p>
+<p>الكمية: ${o.amount}</p>
+<p>آخر 4 أرقام: ${o.last4}</p>
+<p>التاريخ: ${o.date}</p>
+</div>
+`;
+});
+}
+
+function clearOrders(){
+localStorage.removeItem("orders");
+loadOrders();
+}
+
+</script>
+
+</body>
+</html>
